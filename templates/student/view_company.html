@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company.company_name }} | CV Drop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .company-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+        
+        .company-logo-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 3px solid #e2e8f0;
+        }
+        
+        .company-logo-placeholder-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        
+        .follow-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .follow-btn.following {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .stats-section {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .info-content h6 {
+            margin: 0 0 0.25rem 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        
+        .info-content p {
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .job-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .job-card:hover {
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-apply {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-apply:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .no-jobs {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">CV Drop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{{ url_for('student_dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_jobs') }}">
+                        <i class="fas fa-briefcase"></i> Jobs
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_companies') }}">
+                        <i class="fas fa-building"></i> Companies
+                    </a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Company Header -->
+        <div class="company-header">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center mb-3 mb-md-0">
+                    {% if company.logo_url %}
+                        <img src="{{ company.logo_url }}" alt="{{ company.company_name }}" class="company-logo-large">
+                    {% else %}
+                        <div class="company-logo-placeholder-large">
+                            {{ company.company_name[0]|upper }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-7">
+                    <h2>{{ company.company_name }}</h2>
+                    <p class="text-muted mb-0">{{ company.industry or 'Company' }}</p>
+                    
+                    <div class="stats-section">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ follower_count }}</div>
+                            <div class="stat-label">Followers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ company_jobs|length }}</div>
+                            <div class="stat-label">Open Positions</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ company.view_count }}</div>
+                            <div class="stat-label">Views</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 text-end">
+                    <form action="{{ url_for('student_follow_company', company_id=company.id) }}" method="post">
+                        <button type="submit" class="follow-btn {{ 'following' if is_following else '' }}">
+                            <i class="fas fa-{{ 'check' if is_following else 'plus' }} me-2"></i>
+                            {{ 'Following' if is_following else 'Follow Company' }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="content-section">
+            <div class="section-title">
+                <i class="fas fa-info-circle me-2"></i>About {{ company.company_name }}
+            </div>
+            <p>{{ company.description or 'No description available' }}</p>
+        </div>
+
+        <!-- Company Details -->
+        <div class="content-section">
+            <div class="section-title">
+                <i class="fas fa-building me-2"></i>Company Details
+            </div>
+            
+            <div class="info-grid">
+                {% if company.industry %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-industry"></i>
+                    </div>
+                    <div class="info-content">
+                        <h6>Industry</h6>
+                        <p>{{ company.industry }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if company.location %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="info-content">
+                        <h6>Location</h6>
+                        <p>{{ company.location }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if company.company_size %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="info-content">
+                        <h6>Company Size</h6>
+                        <p>{{ company.company_size }} employees</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if company.founded_year %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar"></i>
+                    </div>
+                    <div class="info-content">
+                        <h6>Founded</h6>
+                        <p>{{ company.founded_year }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if company.website %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="info-content">
+                        <h6>Website</h6>
+                        <p><a href="{{ company.website }}" target="_blank">Visit Website</a></p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            {% if company.linkedin_url or company.facebook_url or company.twitter_url %}
+            <div class="mt-4">
+                <h6 class="mb-3">Connect with us</h6>
+                <div class="social-links">
+                    {% if company.linkedin_url %}
+                    <a href="{{ company.linkedin_url }}" target="_blank" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    {% endif %}
+                    {% if company.facebook_url %}
+                    <a href="{{ company.facebook_url }}" target="_blank" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    {% endif %}
+                    {% if company.twitter_url %}
+                    <a href="{{ company.twitter_url }}" target="_blank" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Open Positions -->
+        <div class="content-section">
+            <div class="section-title">
+                <i class="fas fa-briefcase me-2"></i>Open Positions ({{ company_jobs|length }})
+            </div>
+            
+            {% if company_jobs %}
+                {% for job in company_jobs %}
+                <div class="job-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5>{{ job.job_title }}</h5>
+                            <p class="text-muted mb-2">
+                                {% if job.job_type %}
+                                <i class="fas fa-clock me-1"></i>{{ job.job_type }}
+                                {% endif %}
+                                {% if job.location %}
+                                <i class="fas fa-map-marker-alt ms-3 me-1"></i>{{ job.location }}
+                                {% endif %}
+                            </p>
+                            <p>{{ job.job_description[:150] }}{% if job.job_description|length > 150 %}...{% endif %}</p>
+                        </div>
+                        <a href="{{ url_for('apply_job', job_id=job.id) }}" class="btn-apply" target="_blank">
+                            <i class="fas fa-paper-plane me-2"></i>Apply
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-jobs">
+                    <i class="fas fa-briefcase" style="font-size: 2rem; color: #cbd5e0;"></i>
+                    <p>No open positions at the moment</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

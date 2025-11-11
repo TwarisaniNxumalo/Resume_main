@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Jobs | CV Drop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .jobs-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+        
+        .company-badge {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            color: #64748b;
+        }
+        
+        .job-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .job-meta-item i {
+            color: var(--primary-color);
+        }
+        
+        .job-description {
+            color: #475569;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+        
+        .btn-apply {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-apply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .click-count {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .no-jobs {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .no-jobs i {
+            font-size: 3rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .job-header {
+                flex-direction: column;
+            }
+            
+            .job-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">CV Drop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{{ url_for('student_dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_profile') }}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a class="nav-link active" href="{{ url_for('student_jobs') }}">
+                        <i class="fas fa-briefcase"></i> Browse Jobs
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_companies') }}">
+    <i class="fas fa-building"></i> Companies
+</a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="jobs-header">
+            <h2><i class="fas fa-briefcase me-2"></i>Available Opportunities</h2>
+            <p class="text-muted mb-0">Find your next career move</p>
+        </div>
+
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search jobs...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="jobTypeFilter">
+                        <option value="">All Job Types</option>
+                        <option value="full-time">Full-time</option>
+                        <option value="part-time">Part-time</option>
+                        <option value="internship">Internship</option>
+                        <option value="contract">Contract</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary w-100" id="clearFilters">
+                        <i class="fas fa-times me-1"></i>Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="jobsContainer">
+            {% if jobs %}
+                {% for job in jobs %}
+                <div class="job-card" 
+                     data-title="{{ job.job_title|lower }}"
+                     data-company="{{ job.company_name|lower }}"
+                     data-type="{{ job.job_type|lower }}">
+                    <div class="job-header">
+                        <div>
+                            <h4>{{ job.job_title }}</h4>
+                            <span class="company-badge">{{ job.company_name }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="job-meta">
+                        {% if job.job_type %}
+                        <div class="job-meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ job.job_type }}</span>
+                        </div>
+                        {% endif %}
+                        {% if job.location %}
+                        <div class="job-meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ job.location }}</span>
+                        </div>
+                        {% endif %}
+                        {% if job.salary_range %}
+                        <div class="job-meta-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>{{ job.salary_range }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="job-meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>Posted {{ job.posted_date.strftime('%b %d, %Y') }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="job-description">
+                        <p>{{ job.job_description[:250] }}{% if job.job_description|length > 250 %}...{% endif %}</p>
+                    </div>
+                    
+                    {% if job.requirements %}
+                    <div class="mb-3">
+                        <strong><i class="fas fa-check-circle me-1"></i>Requirements:</strong>
+                        <p class="mt-2">{{ job.requirements[:200] }}{% if job.requirements|length > 200 %}...{% endif %}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('apply_job', job_id=job.id) }}" 
+                           class="btn btn-apply" 
+                           target="_blank">
+                            <i class="fas fa-paper-plane me-2"></i>Apply Now
+                        </a>
+                        <div class="click-count">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <span>{{ job.click_count }} applications</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-jobs">
+                    <i class="fas fa-search"></i>
+                    <h5>No jobs available</h5>
+                    <p class="text-muted">Check back soon for new opportunities</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="noResults" class="no-jobs" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h5>No jobs found</h5>
+            <p class="text-muted">Try adjusting your search filters</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const jobTypeFilter = document.getElementById('jobTypeFilter');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+            const jobsContainer = document.getElementById('jobsContainer');
+            const noResults = document.getElementById('noResults');
+            const jobCards = document.querySelectorAll('.job-card');
+            
+            function filterJobs() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const jobType = jobTypeFilter.value.toLowerCase();
+                let visibleCount = 0;
+
+                jobCards.forEach(card => {
+                    const title = card.dataset.title;
+                    const company = card.dataset.company;
+                    const type = card.dataset.type;
+
+                    const matchesSearch = title.includes(searchTerm) || company.includes(searchTerm);
+                    const matchesType = !jobType || type === jobType;
+
+                    if (matchesSearch && matchesType) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    jobsContainer.style.display = 'none';
+                    noResults.style.display = 'block';
+                } else {
+                    jobsContainer.style.display = 'block';
+                    noResults.style.display = 'none';
+                }
+            }
+            
+            searchInput.addEventListener('input', filterJobs);
+            jobTypeFilter.addEventListener('change', filterJobs);
+            clearFiltersBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                jobTypeFilter.value = '';
+                filterJobs();
+            });
+        });
+    </script>
+</body>
+</html>

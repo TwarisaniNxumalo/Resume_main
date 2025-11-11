@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Companies | CV Drop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            margin-left: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .page-header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+        
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .company-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .company-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .company-logo-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .featured-badge {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .company-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+        
+        .company-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .company-meta-item i {
+            color: var(--primary-color);
+        }
+        
+        .follow-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .follow-btn.following {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-view {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view:hover {
+            color: white;
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .no-companies {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .no-companies i {
+            font-size: 3rem;
+            color: #cbd5e0;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">CV Drop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{{ url_for('student_dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_profile') }}">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student_jobs') }}">
+                        <i class="fas fa-briefcase"></i> Jobs
+                    </a>
+                    <a class="nav-link active" href="{{ url_for('student_companies') }}">
+                        <i class="fas fa-building"></i> Companies
+                    </a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h2><i class="fas fa-building me-2"></i>Explore Companies</h2>
+            <p class="text-muted mb-0">Discover companies and follow the ones you're interested in</p>
+        </div>
+
+        <div class="filter-section">
+            <div class="row">
+                <div class="col-md-8 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search companies...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-outline-secondary w-100" id="clearFilters">
+                        <i class="fas fa-times me-1"></i>Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="companiesContainer">
+            {% if companies %}
+                {% for company in companies %}
+                <div class="company-card" 
+                     data-name="{{ company.company_name|lower }}"
+                     data-industry="{{ company.industry|lower if company.industry else '' }}"
+                     onclick="window.location='{{ url_for('student_view_company', company_id=company.id) }}'">
+                    <div class="row">
+                        <div class="col-md-2 text-center mb-3 mb-md-0">
+                            {% if company.logo_url %}
+                                <img src="{{ company.logo_url }}" alt="{{ company.company_name }}" class="company-logo">
+                            {% else %}
+                                <div class="company-logo-placeholder">
+                                    {{ company.company_name[0]|upper }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-10">
+                            {% if company.is_featured %}
+                            <div class="featured-badge">
+                                <i class="fas fa-star me-1"></i>Featured Company
+                            </div>
+                            {% endif %}
+                            
+                            <h4>{{ company.company_name }}</h4>
+                            
+                            <div class="company-meta">
+                                {% if company.industry %}
+                                <div class="company-meta-item">
+                                    <i class="fas fa-industry"></i>
+                                    <span>{{ company.industry }}</span>
+                                </div>
+                                {% endif %}
+                                {% if company.location %}
+                                <div class="company-meta-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ company.location }}</span>
+                                </div>
+                                {% endif %}
+                                {% if company.company_size %}
+                                <div class="company-meta-item">
+                                    <i class="fas fa-users"></i>
+                                    <span>{{ company.company_size }} employees</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <p class="mb-3">
+                                {{ company.description[:200] if company.description else 'No description available' }}
+                                {% if company.description and company.description|length > 200 %}...{% endif %}
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <a href="{{ url_for('student_view_company', company_id=company.id) }}" 
+                                   class="btn-view" onclick="event.stopPropagation()">
+                                    <i class="fas fa-arrow-right me-2"></i>View Company
+                                </a>
+                                
+                                <form action="{{ url_for('student_follow_company', company_id=company.id) }}" 
+                                      method="post" style="display:inline;" onclick="event.stopPropagation()">
+                                    <button type="submit" class="follow-btn {{ 'following' if company.id in followed_company_ids else '' }}">
+                                        <i class="fas fa-{{ 'check' if company.id in followed_company_ids else 'plus' }} me-1"></i>
+                                        {{ 'Following' if company.id in followed_company_ids else 'Follow' }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-companies">
+                    <i class="fas fa-building"></i>
+                    <h5>No companies yet</h5>
+                    <p class="text-muted">Check back soon for exciting companies to explore</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="noResults" class="no-companies" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h5>No companies found</h5>
+            <p class="text-muted">Try adjusting your search</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const clearFiltersBtn = document.getElementById('clearFilters');
+            const companiesContainer = document.getElementById('companiesContainer');
+            const noResults = document.getElementById('noResults');
+            const companyCards = document.querySelectorAll('.company-card');
+            
+            function filterCompanies() {
+                const searchTerm = searchInput.value.toLowerCase();
+                let visibleCount = 0;
+
+                companyCards.forEach(card => {
+                    const name = card.dataset.name;
+                    const industry = card.dataset.industry;
+
+                    const matchesSearch = name.includes(searchTerm) || industry.includes(searchTerm);
+
+                    if (matchesSearch) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (visibleCount === 0) {
+                    companiesContainer.style.display = 'none';
+                    noResults.style.display = 'block';
+                } else {
+                    companiesContainer.style.display = 'block';
+                    noResults.style.display = 'none';
+                }
+            }
+            
+            searchInput.addEventListener('input', filterCompanies);
+            clearFiltersBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                filterCompanies();
+            });
+        });
+    </script>
+</body>
+</html>

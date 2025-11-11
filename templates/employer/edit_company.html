@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Company | CV Drop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        .employer-navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+        
+        .employer-navbar .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .employer-navbar .nav-link {
+            font-weight: 500;
+            margin-left: 1rem;
+        }
+        
+        .employer-navbar .nav-link i {
+            margin-right: 8px;
+        }
+        
+        .form-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .form-section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .required-field::after {
+            content: "*";
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+        
+        .help-text {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark employer-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('employer_dashboard') }}">
+                <i class="fas fa-briefcase me-2"></i>CV Drop
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#employerNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="employerNavbar">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="{{ url_for('employer_dashboard') }}">
+                        <i class="fas fa-tachometer-alt"></i>Dashboard
+                    </a>
+                    <a class="nav-link" href="{{ url_for('employer_jobs') }}">
+                        <i class="fas fa-briefcase"></i>Jobs
+                    </a>
+                    <a class="nav-link" href="{{ url_for('employer_companies') }}">
+                        <i class="fas fa-building"></i>Companies
+                    </a>
+                    <a class="nav-link" href="{{ url_for('logout') }}">
+                        <i class="fas fa-sign-out-alt"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h2 class="mb-4"><i class="fas fa-edit me-2"></i>Edit Company Profile</h2>
+        
+        <form method="POST" action="{{ url_for('employer_edit_company', company_id=company.id) }}">
+            <!-- Basic Information -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-info-circle me-2"></i>Basic Information
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        <label for="company_name" class="form-label required-field">Company Name</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" 
+                               value="{{ company.company_name }}" required>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="founded_year" class="form-label">Founded Year</label>
+                        <input type="text" class="form-control" id="founded_year" name="founded_year" 
+                               value="{{ company.founded_year or '' }}" placeholder="e.g., 2015">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="industry" class="form-label">Industry</label>
+                        <input type="text" class="form-control" id="industry" name="industry" 
+                               value="{{ company.industry or '' }}" placeholder="e.g., Technology, Finance, Healthcare">
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="company_size" class="form-label">Company Size</label>
+                        <select class="form-select" id="company_size" name="company_size">
+                            <option value="">Select Size</option>
+                            <option value="1-10" {% if company.company_size == '1-10' %}selected{% endif %}>1-10 employees</option>
+                            <option value="11-50" {% if company.company_size == '11-50' %}selected{% endif %}>11-50 employees</option>
+                            <option value="51-200" {% if company.company_size == '51-200' %}selected{% endif %}>51-200 employees</option>
+                            <option value="201-500" {% if company.company_size == '201-500' %}selected{% endif %}>201-500 employees</option>
+                            <option value="501-1000" {% if company.company_size == '501-1000' %}selected{% endif %}>501-1000 employees</option>
+                            <option value="1000+" {% if company.company_size == '1000+' %}selected{% endif %}>1000+ employees</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" 
+                           value="{{ company.location or '' }}" placeholder="e.g., Durban, South Africa">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="description" class="form-label required-field">Company Description</label>
+                    <textarea class="form-control" id="description" name="description" rows="5" required>{{ company.description }}</textarea>
+                </div>
+            </div>
+            
+            <!-- Online Presence -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-globe me-2"></i>Online Presence
+                </div>
+                
+                <div class="mb-3">
+                    <label for="website" class="form-label">Company Website</label>
+                    <input type="url" class="form-control" id="website" name="website" 
+                           value="{{ company.website or '' }}" placeholder="https://yourcompany.com">
+                    <div class="help-text">Must be a valid URL (include https://)</div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="logo_url" class="form-label">Company Logo URL</label>
+                    <input type="url" class="form-control" id="logo_url" name="logo_url" 
+                           value="{{ company.logo_url or '' }}" placeholder="https://example.com/logo.png">
+                    <div class="help-text">Enter a URL to your company logo image (recommended: 400x400px)</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="linkedin_url" class="form-label">LinkedIn URL</label>
+                        <input type="url" class="form-control" id="linkedin_url" name="linkedin_url" 
+                               value="{{ company.linkedin_url or '' }}" placeholder="https://linkedin.com/company/...">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="facebook_url" class="form-label">Facebook URL</label>
+                        <input type="url" class="form-control" id="facebook_url" name="facebook_url" 
+                               value="{{ company.facebook_url or '' }}" placeholder="https://facebook.com/...">
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <label for="twitter_url" class="form-label">Twitter/X URL</label>
+                        <input type="url" class="form-control" id="twitter_url" name="twitter_url" 
+                               value="{{ company.twitter_url or '' }}" placeholder="https://twitter.com/...">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>Save Changes
+                </button>
+                <a href="{{ url_for('employer_companies') }}" class="btn btn-secondary">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
