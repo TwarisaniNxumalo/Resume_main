@@ -92,8 +92,18 @@ class CompanyFollow(db.Model):
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'your-secret-key-change-this-in-production'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cv_drop.db'
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your-secret-key-change-this-in-production')
+    
+    # Use PostgreSQL for production, SQLite for development
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        # Fix PostgreSQL URL if using the psycopg2 driver
+        if database_url.startswith('postgres://'):
+            database_url = database_url.replace('postgres://', 'postgresql://', 1)
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cv_drop.db'
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'uploads')
 
@@ -864,7 +874,6 @@ def create_app():
         return render_template('500.html'), 500
 
     with app.app_context():
-        db.create_all()
         try:
             db.create_all()
             print("Database tables created successfully!")
