@@ -884,6 +884,9 @@ def create_app():
 
     return app
 
+# CRITICAL: This line is needed for Azure deployment
+# Create the app instance at module level so gunicorn can find it
+app = create_app()
+
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True, host='127.0.0.1', port=5000)
